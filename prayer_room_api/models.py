@@ -51,6 +51,20 @@ class PrayerPraiseRequest(models.Model):
     def __str__(self):
         return f"{self.name}: {self.content[:10]}"
 
+    def apply_banned_word_actions(self):
+        text_lower = self.content.lower()
+        for choice in BannedWord.AutoActionChoices:
+            words = BannedWord.objects.filter(
+                auto_action=choice, is_active=True
+            ).values_list("word", flat=True)
+            if any(word.lower() in text_lower for word in words):
+                if choice == BannedWord.AutoActionChoices.flag:
+                    self.flagged_at = now()
+                elif choice == BannedWord.AutoActionChoices.archive:
+                    self.archived_at = now()
+                elif choice == BannedWord.AutoActionChoices.approve:
+                    self.approved_at = now()
+
     def save(self, *args, **kwargs):
         # this is manual until I have imported all the data
         if not self.pk and not self.created_at:

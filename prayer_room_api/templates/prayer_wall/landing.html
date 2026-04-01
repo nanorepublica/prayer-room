@@ -1,0 +1,38 @@
+{% extends "public_base.html" %}
+
+{% block title %}Prayer Room{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-16 text-center">
+
+    <h1 class="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">
+        {{ content.title|default:"Welcome to the Prayer Room" }}
+    </h1>
+    <p class="text-lg text-stone-600 dark:text-stone-400 mb-12 max-w-xl mx-auto">
+        {{ content.subtitle|default:"A place to share, pray, and encourage one another." }}
+    </p>
+
+    {% if inspiration %}
+    <div class="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg p-8 mb-12 max-w-lg mx-auto">
+        <blockquote class="text-stone-700 dark:text-stone-300 italic text-lg mb-3">
+            &ldquo;{{ inspiration.content }}&rdquo;
+        </blockquote>
+        <cite class="text-sm text-stone-500 dark:text-stone-400 not-italic">
+            {{ inspiration.verse }}
+        </cite>
+    </div>
+    {% endif %}
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{% url 'submit-prayer' %}"
+           class="inline-block px-6 py-3 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-lg font-medium hover:bg-stone-700 dark:hover:bg-stone-300 transition-colors">
+            Submit a Prayer
+        </a>
+        <a href="{% url 'prayer-wall' %}"
+           class="inline-block px-6 py-3 border border-stone-300 dark:border-stone-600 text-stone-700 dark:text-stone-300 rounded-lg font-medium hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+            View Prayer Wall
+        </a>
+    </div>
+
+</div>
+{% endblock %}

@@ -18,9 +18,16 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from django.views.generic import RedirectView
 from rest_framework.routers import SimpleRouter
 
+from .public_views import (
+    FlagPrayerView,
+    LandingView,
+    PrayerWallView,
+    PrayPrayerView,
+    ResourcesView,
+    SubmitPrayerView,
+)
 from .views import (
     BannedWordCRUDView,
     EmailTemplateCRUDView,
@@ -69,8 +76,17 @@ staff_patterns = [
     ),
 ]
 
+public_patterns = [
+    path("", LandingView.as_view(), name="landing"),
+    path("wall/", PrayerWallView.as_view(), name="prayer-wall"),
+    path("wall/submit/", SubmitPrayerView.as_view(), name="submit-prayer"),
+    path("wall/pray/<int:pk>/", PrayPrayerView.as_view(), name="pray-prayer"),
+    path("wall/flag/<int:pk>/", FlagPrayerView.as_view(), name="flag-prayer"),
+    path("resources/", ResourcesView.as_view(), name="resources"),
+]
+
 urlpatterns = [
-    path("", RedirectView.as_view(pattern_name="moderation"), name="home"),
+    path("", include(public_patterns)),
     path("admin/", admin.site.urls),
     path("staff/", include(staff_patterns)),
     path("api/", include(router.urls)),

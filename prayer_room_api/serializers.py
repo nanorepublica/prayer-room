@@ -1,9 +1,7 @@
 from django.contrib.auth.models import User
-from django.utils import timezone
 from rest_framework import serializers
 
 from .models import (
-    BannedWord,
     HomePageContent,
     Location,
     PrayerInspiration,
@@ -94,32 +92,13 @@ class PrayerPraiseRequestSerializer(serializers.ModelSerializer):
                         username, email, None, first_name=first_name
                     )
             validated_data["created_by"] = user
-        # Leave blank if not provided / signed in
-        return super().create(validated_data)
+        instance = super().create(validated_data)
+        instance.apply_banned_word_actions()
+        instance.save()
+        return instance
 
     def get_is_approved(self, obj):
         return bool(obj.approved_at)
-
-    def _auto_action(self, choice, text):
-        queryset = BannedWord.objects.filter(auto_action=choice).values_list(
-            "word", flat=True
-        )
-        if any(word.lower() in text for word in queryset):
-            return timezone.now()
-        return None
-
-    def validate(self, attrs):
-        text_lower = attrs["content"].lower()
-        attrs["archived_at"] = self._auto_action(
-            BannedWord.AutoActionChoices.archive, text_lower
-        )
-        attrs["flagged_at"] = self._auto_action(
-            BannedWord.AutoActionChoices.flag, text_lower
-        )
-        attrs["approved_at"] = self._auto_action(
-            BannedWord.AutoActionChoices.approve, text_lower
-        )
-        return attrs
 
 
 class PrayerPraiseRequestWebhookSerializer(PrayerPraiseRequestSerializer):

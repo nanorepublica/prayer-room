@@ -24,5 +24,11 @@ dev: install migrate
 serve:
     .venv/bin/python manage.py tailwind runserver 8001
 
+tw-dev:
+    python manage.py tailwind watch
+
+tw-build:
+    python manage.py tailwind build
+
 worker:
     .venv/bin/celery -A prayer_room_api worker --loglevel=info

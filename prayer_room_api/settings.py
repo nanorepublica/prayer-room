@@ -206,6 +206,7 @@ class Settings(BaseSettings):
                     "django_filters",
                     "django_prodserver",
                     "django_celery_beat",
+                    "django_tailwind_cli",
                     "prayer_room_api",
                 ],
             )

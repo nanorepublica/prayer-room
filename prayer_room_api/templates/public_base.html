@@ -1,0 +1,66 @@
+{% load static django_htmx %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Prayer Room{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+    {% django_htmx_script %}
+    <script>
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+</head>
+<body class="min-h-screen bg-stone-50 text-stone-800 dark:bg-stone-900 dark:text-stone-200 flex flex-col"
+      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    <header class="border-b border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800">
+        <nav class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="{% url 'landing' %}" class="text-lg font-semibold text-stone-900 dark:text-stone-100">
+                Prayer Room
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="{% url 'prayer-wall' %}"
+                   class="text-sm text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
+                    Prayer Wall
+                </a>
+                <a href="{% url 'resources' %}"
+                   class="text-sm text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
+                    Resources
+                </a>
+                <button onclick="toggleTheme()" aria-label="Toggle theme"
+                        class="text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200">
+                    <span id="theme-icon" class="text-lg">&#9790;</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="border-t border-stone-200 dark:border-stone-700 py-6 mt-12">
+        <div class="max-w-5xl mx-auto px-4 text-center text-sm text-stone-400 dark:text-stone-500">
+            Tim Creamer Prayer Room
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('theme-icon').textContent = isDark ? '\u2600' : '\u263E';
+        }
+        // Set initial icon
+        document.getElementById('theme-icon').textContent =
+            document.documentElement.classList.contains('dark') ? '\u2600' : '\u263E';
+    </script>
+</body>
+</html>

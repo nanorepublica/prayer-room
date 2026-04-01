@@ -1,0 +1,107 @@
+{% extends "public_base.html" %}
+
+{% block title %}Prayer Resources — Prayer Room{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-10">
+
+    <h1 class="text-2xl font-bold text-stone-900 dark:text-stone-100 mb-8">Prayer Resources</h1>
+
+    {% for section, items in grouped_resources %}
+    <details class="mb-6 group" open>
+        <summary class="cursor-pointer flex items-center justify-between bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg px-5 py-4 select-none">
+            <div>
+                <h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">{{ section.title }}</h2>
+                {% if section.description %}
+                <p class="text-sm text-stone-500 dark:text-stone-400 mt-0.5">{{ section.description }}</p>
+                {% endif %}
+            </div>
+            <span class="text-stone-400 dark:text-stone-500 transition-transform group-open:rotate-90">&#9654;</span>
+        </summary>
+        <div class="mt-2 space-y-3 pl-2">
+            {% for resource in items %}
+            <div class="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg p-4">
+                {% if resource.resource_type == "link" %}
+                    <a href="{{ resource.url }}" target="_blank" rel="noopener noreferrer"
+                       class="text-stone-900 dark:text-stone-100 font-medium hover:underline inline-flex items-center gap-1">
+                        {{ resource.title }}
+                        <span class="text-xs text-stone-400">&#8599;</span>
+                    </a>
+                    {% if resource.description %}
+                    <p class="text-sm text-stone-500 dark:text-stone-400 mt-1">{{ resource.description }}</p>
+                    {% endif %}
+
+                {% elif resource.resource_type == "video" %}
+                    <h3 class="font-medium text-stone-900 dark:text-stone-100 mb-2">{{ resource.title }}</h3>
+                    {% if resource.description %}
+                    <p class="text-sm text-stone-500 dark:text-stone-400 mb-3">{{ resource.description }}</p>
+                    {% endif %}
+                    {% if resource.url %}
+                    <div class="aspect-video rounded-md overflow-hidden bg-stone-100 dark:bg-stone-700">
+                        <iframe src="{{ resource.url }}" class="w-full h-full" allowfullscreen
+                                loading="lazy" title="{{ resource.title }}"></iframe>
+                    </div>
+                    {% endif %}
+
+                {% elif resource.resource_type == "audio" %}
+                    <h3 class="font-medium text-stone-900 dark:text-stone-100 mb-2">{{ resource.title }}</h3>
+                    {% if resource.description %}
+                    <p class="text-sm text-stone-500 dark:text-stone-400 mb-3">{{ resource.description }}</p>
+                    {% endif %}
+                    {% if resource.url %}
+                    <audio controls preload="none" class="w-full">
+                        <source src="{{ resource.url }}">
+                    </audio>
+                    {% endif %}
+
+                {% elif resource.resource_type == "text" %}
+                    <h3 class="font-medium text-stone-900 dark:text-stone-100 mb-2">{{ resource.title }}</h3>
+                    {% if resource.description %}
+                    <p class="text-sm text-stone-500 dark:text-stone-400 mb-2">{{ resource.description }}</p>
+                    {% endif %}
+                    {% if resource.content %}
+                    <div class="text-sm text-stone-700 dark:text-stone-300 leading-relaxed prose-sm">
+                        {{ resource.content|linebreaks }}
+                    </div>
+                    {% endif %}
+
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </details>
+    {% endfor %}
+
+    {% for resource in standalone_resources %}
+    <div class="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg p-4 mb-4">
+        {% if resource.resource_type == "link" %}
+            <a href="{{ resource.url }}" target="_blank" rel="noopener noreferrer"
+               class="text-stone-900 dark:text-stone-100 font-medium hover:underline inline-flex items-center gap-1">
+                {{ resource.title }}
+                <span class="text-xs text-stone-400">&#8599;</span>
+            </a>
+            {% if resource.description %}
+            <p class="text-sm text-stone-500 dark:text-stone-400 mt-1">{{ resource.description }}</p>
+            {% endif %}
+        {% elif resource.resource_type == "text" %}
+            <h3 class="font-medium text-stone-900 dark:text-stone-100 mb-2">{{ resource.title }}</h3>
+            {% if resource.content %}
+            <div class="text-sm text-stone-700 dark:text-stone-300 leading-relaxed">
+                {{ resource.content|linebreaks }}
+            </div>
+            {% endif %}
+        {% else %}
+            <h3 class="font-medium text-stone-900 dark:text-stone-100">{{ resource.title }}</h3>
+            {% if resource.description %}
+            <p class="text-sm text-stone-500 dark:text-stone-400 mt-1">{{ resource.description }}</p>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    {% if not grouped_resources and not standalone_resources %}
+    <p class="text-center text-stone-400 dark:text-stone-500 py-12">No resources available yet.</p>
+    {% endif %}
+
+</div>
+{% endblock %}
