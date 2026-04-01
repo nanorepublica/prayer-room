@@ -296,5 +296,5 @@ class PrayerResponseIntegrationTests(TestCase):
         """Test navigation link appears for staff users."""
         self.client.login(username="staffuser", password="testpass123")
         response = self.client.get(reverse("prayer-response"))
-        self.assertContains(response, 'href="/prayers/respond/"')
+        self.assertContains(response, f'href="{reverse("prayer-response")}"')
         self.assertContains(response, "Respond")
