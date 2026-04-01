@@ -50,9 +50,7 @@ router.register(r"resources", PrayerResourceViewSet)
 router.register(r"user-profile", UserProfileViewSet, basename="user-profile")
 
 
-urlpatterns = [
-    path("", RedirectView.as_view(pattern_name="moderation"), name="home"),
-    path("admin/", admin.site.urls),
+staff_patterns = [
     path("moderation/", ModerationView.as_view(), name="moderation"),
     path("flagged/", FlaggedView.as_view(), name="flagged"),
     path("prayers/respond/", PrayerResponseView.as_view(), name="prayer-response"),
@@ -69,6 +67,12 @@ urlpatterns = [
         EmailTemplatePreviewView.as_view(),
         name="emailtemplate-preview",
     ),
+]
+
+urlpatterns = [
+    path("", RedirectView.as_view(pattern_name="moderation"), name="home"),
+    path("admin/", admin.site.urls),
+    path("staff/", include(staff_patterns)),
     path("api/", include(router.urls)),
     path("auth/", include("allauth.urls")),
     path("_allauth/", include("allauth.headless.urls")),
