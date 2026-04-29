@@ -70,12 +70,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
           aws-region: "eu-west-2"
-          aws-security-group-id: "sg-016ecaf83f73027d2"
+          aws-security-group-id: "sg-0e2a639b321457151"
 
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: "ssh://dokku@dokku.thec3.uk:22/prayer-room-api"
+          git_remote_url: "ssh://dokku@dokku.akmiller.co.uk:22/prayer-room"
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           branch: "main"
           git_push_flags: "--force"
