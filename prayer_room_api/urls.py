@@ -74,8 +74,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("staff/", include(staff_patterns)),
     path("api/", include(router.urls)),
-    path("auth/", include("allauth.urls")),
-    path("_allauth/", include("allauth.headless.urls")),
     path(
         "api/preferences/update/",
         UpdatePreferencesView.as_view(),

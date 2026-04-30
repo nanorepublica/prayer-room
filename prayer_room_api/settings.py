@@ -78,6 +78,11 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+STATICFILES_DIRS = [str(BASE_DIR / "prayer_room_api" / "static")]
+
+TAILWIND_CLI_SRC_CSS = "src/input.css"
+TAILWIND_CLI_DIST_CSS = "css/tailwind.css"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -92,7 +97,6 @@ DJANGO_WEBHOOK = dict(
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 SENTRY_DSN = os.environ.get("SENTRY_DSN")
@@ -195,13 +199,9 @@ class Settings(BaseSettings):
                     "rest_framework.authtoken",
                     "corsheaders",
                     "django_webhook",
-                    "allauth",
-                    "allauth.account",
-                    "allauth.headless",
-                    "allauth.socialaccount",
-                    "socialaccount.providers.churchsuite",
                     "django_extensions",
                     "django_htmx",
+                    "django_tailwind_cli",
                     "neapolitan",
                     "django_filters",
                     "django_prodserver",
@@ -224,7 +224,6 @@ class Settings(BaseSettings):
                     "django.contrib.auth.middleware.AuthenticationMiddleware",
                     "django.contrib.messages.middleware.MessageMiddleware",
                     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-                    "allauth.account.middleware.AccountMiddleware",
                     "django_htmx.middleware.HtmxMiddleware",
                     (
                         "whitenoise.middleware.WhiteNoiseMiddleware"
@@ -256,46 +255,6 @@ class Settings(BaseSettings):
     def DATABASES(self):
         return {
             "default": self.DEFAULT_DATABASE,
-        }
-
-    SOCIALACCOUNT_STORE_TOKENS = True
-    ACCOUNT_EMAIL_REQUIRED = True
-    SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
-    ACCOUNT_LOGIN_METHODS = {"email"}
-    SOCIALACCOUNT_ADAPTER = "prayer_room_api.adapters.SocialAccountAdapter"
-
-    def SOCIALACCOUNT_PROVIDERS(self):
-
-        CHURCHSUITE_CLIENT_ID = os.environ["CHURCHSUITE_CLIENT_ID"]
-        CHURCHSUITE_CLIENT_SECRET = os.environ["CHURCHSUITE_CLIENT_SECRET"]
-        return {
-            "churchsuite": {
-                "APP": {
-                    "provider_id": "churchsuite",
-                    "name": "Churchsuite",
-                    "client_id": CHURCHSUITE_CLIENT_ID,
-                    "secret": CHURCHSUITE_CLIENT_SECRET,
-                    "key": "thec3",
-                }
-            }
-        }
-
-    # SOCIALACCOUNT_PROVIDERS['churchsuite']['APP']['client_id'] = CHURCHSUITE_CLIENT_ID
-    # SOCIALACCOUNT_PROVIDERS['churchsuite']['APP']['secret'] = CHURCHSUITE_CLIENT_SECRET
-
-    def HEADLESS_FRONTEND_URLS(self):
-        return {
-            "account_confirm_email": "https://app.project.org/account/verify-email/{key}",
-            # Key placeholders are automatically populated. You are free to adjust this
-            # to your own needs, e.g.
-            #
-            # "https://app.project.org/account/email/verify-email?token={key}",
-            "account_reset_password": "https://app.project.org/account/password/reset",
-            "account_reset_password_from_key": "https://app.project.org/account/password/reset/key/{key}",
-            "account_signup": "https://app.project.org/account/signup",
-            # Fallback in case the state containing the `next` URL is lost and the handshake
-            # with the third-party provider fails.
-            "socialaccount_login_error": "https://app.project.org/account/provider/callback",
         }
 
     def PRODUCTION_PROCESSES(self):
@@ -341,13 +300,6 @@ class StagingSettings(Settings):
             },
         }
 
-    def HEADLESS_FRONTEND_URLS(self):
-        return {
-            "account_confirm_email": "https://app.project.org/account/verify-email/{key}",
-            "account_reset_password_from_key": "https://app.org/account/password/reset/key/{key}",
-            "account_signup": "https://app.org/account/signup",
-        }
-
 
 class ProdSettings(Settings):
     # Override
@@ -377,13 +329,6 @@ class ProdSettings(Settings):
             "AMAZON_SES_CLIENT_PARAMS": {
                 "region_name": os.environ.get("AWS_SES_REGION", "eu-west-2"),
             },
-        }
-
-    def HEADLESS_FRONTEND_URLS(self):
-        return {
-            "account_confirm_email": "https://app.project.org/account/verify-email/{key}",
-            "account_reset_password_from_key": "https://app.org/account/password/reset/key/{key}",
-            "account_signup": "https://app.org/account/signup",
         }
 
 

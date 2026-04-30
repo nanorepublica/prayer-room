@@ -2,7 +2,6 @@ import random
 from datetime import datetime
 
 import requests
-from allauth.socialaccount.models import SocialToken
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
