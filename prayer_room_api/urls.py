@@ -43,6 +43,7 @@ from .views import (
     PrayerResourceViewSet,
     PrayerResponseView,
     SettingModelViewSet,
+    StaffDashboardView,
     UpdatePreferencesView,
     UserProfileViewSet,
 )
@@ -58,6 +59,7 @@ router.register(r"user-profile", UserProfileViewSet, basename="user-profile")
 
 
 staff_patterns = [
+    path("", StaffDashboardView.as_view(), name="staff-dashboard"),
     path("moderation/", ModerationView.as_view(), name="moderation"),
     path("flagged/", FlaggedView.as_view(), name="flagged"),
     path("prayers/respond/", PrayerResponseView.as_view(), name="prayer-response"),

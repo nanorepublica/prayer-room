@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Prayer Room{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
-    {% django_htmx_script %}
+    {% htmx_script %}
     <script>
         (function() {
             const saved = localStorage.getItem('theme');
@@ -33,6 +33,12 @@
                    class="text-sm text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
                     Resources
                 </a>
+                {% if user.is_staff %}
+                <a href="{% url 'staff-dashboard' %}"
+                   class="text-sm font-medium text-amber-700 hover:text-amber-900 dark:text-amber-400 dark:hover:text-amber-200 border border-amber-200 dark:border-amber-700/50 bg-amber-50 dark:bg-amber-900/20 rounded-md px-2.5 py-1">
+                    Staff
+                </a>
+                {% endif %}
                 <button onclick="toggleTheme()" aria-label="Toggle theme"
                         class="text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200">
                     <span id="theme-icon" class="text-lg">&#9790;</span>

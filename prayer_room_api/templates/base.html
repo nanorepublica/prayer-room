@@ -778,7 +778,7 @@
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <header class="site-header">
         <div class="header-top">
-            <a href="{% url 'moderation' %}" class="site-title">Tim Creamer Prayer Room</a>
+            <a href="{% url 'staff-dashboard' %}" class="site-title">Tim Creamer Prayer Room</a>
             <div class="header-right">
                 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
                     <span class="icon-sun">&#9728;</span>
@@ -806,6 +806,7 @@
         </div>
         <nav class="header-nav">
             <div class="nav-links">
+                <a href="{% url 'staff-dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'staff-dashboard' %}active{% endif %}">Dashboard</a>
                 <a href="{% url 'moderation' %}" class="nav-link {% if request.resolver_match.url_name == 'moderation' %}active{% endif %}">Moderation</a>
                 <a href="{% url 'flagged' %}" class="nav-link {% if request.resolver_match.url_name == 'flagged' %}active{% endif %}">Flagged</a>
                 <a href="{% url 'prayer-response' %}" class="nav-link {% if request.resolver_match.url_name == 'prayer-response' %}active{% endif %}">Respond</a>
