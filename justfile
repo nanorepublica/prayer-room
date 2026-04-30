@@ -1,24 +1,28 @@
 install:
-    python -m venv .venv
-    pip3 install poetry
-    poetry install
+    test -d .venv || python -m venv .venv
+    .venv/bin/pip install --quiet poetry
+    .venv/bin/poetry install
 
 manage *FLAGS:
-    python manage.py {{FLAGS}}
+    .venv/bin/python manage.py {{FLAGS}}
 
 migrate:
-    python manage.py migrate
+    .venv/bin/python manage.py migrate
 
 tailwind:
-    python manage.py tailwind build
+    .venv/bin/python manage.py tailwind build
 
 tailwind-watch:
-    python manage.py tailwind watch
+    .venv/bin/python manage.py tailwind watch
 
-bootstrap: install migrate tailwind
+# One-shot: install deps, run migrations, then start dev server
+# with Tailwind in watch mode on port 8001.
+dev: install migrate
+    .venv/bin/python manage.py tailwind runserver 8001
 
-dev:
-    python manage.py runserver 8001
+# Same as `dev` but only the server (skips install/migrate)
+serve:
+    .venv/bin/python manage.py tailwind runserver 8001
 
 worker:
-    celery -A prayer_room_api worker --loglevel=info
+    .venv/bin/celery -A prayer_room_api worker --loglevel=info

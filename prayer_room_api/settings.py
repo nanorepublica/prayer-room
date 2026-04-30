@@ -80,7 +80,7 @@ STATIC_URL = "static/"
 
 STATICFILES_DIRS = [str(BASE_DIR / "prayer_room_api" / "static")]
 
-TAILWIND_CLI_SRC_CSS = "src/input.css"
+TAILWIND_CLI_SRC_CSS = "prayer_room_api/static/src/input.css"
 TAILWIND_CLI_DIST_CSS = "css/tailwind.css"
 
 # Default primary key field type
