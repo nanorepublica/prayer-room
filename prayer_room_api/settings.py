@@ -201,7 +201,6 @@ class Settings(BaseSettings):
                     "django_webhook",
                     "django_extensions",
                     "django_htmx",
-                    "django_tailwind_cli",
                     "neapolitan",
                     "django_filters",
                     "django_prodserver",
