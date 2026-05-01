@@ -4,7 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Prayer Room{% endblock %}</title>
+    <title>{% block subtitle %}{% endblock %}{{ site.brand_name|default:"Prayer Room" }}</title>
+    <style>
+        :root {
+            --brand-primary: {{ site.brand_primary_rgb|default:"23 23 23" }};
+            --brand-on-primary: {{ site.brand_on_primary_rgb|default:"255 255 255" }};
+            {% if site.brand_font_family %}--brand-font: "{{ site.brand_font_family }}";{% endif %}
+        }
+    </style>
+    {% if site.brand_font_google_url %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="{{ site.brand_font_google_url }}">
+    {% endif %}
     <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
     {% htmx_script %}
     <script>
@@ -22,16 +34,16 @@
     <header class="border-b border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800">
         <nav class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
             <a href="{% url 'landing' %}" class="text-lg font-semibold text-stone-900 dark:text-stone-100">
-                Prayer Room
+                {{ site.brand_name|default:"Prayer Room" }}
             </a>
             <div class="flex items-center gap-6">
                 <a href="{% url 'prayer-wall' %}"
                    class="text-sm text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
-                    Prayer Wall
+                    {{ site.nav_wall|default:"Prayer Wall" }}
                 </a>
                 <a href="{% url 'resources' %}"
                    class="text-sm text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
-                    Resources
+                    {{ site.nav_resources|default:"Resources" }}
                 </a>
                 {% if user.is_staff %}
                 <a href="{% url 'staff-dashboard' %}"
@@ -53,7 +65,7 @@
 
     <footer class="border-t border-stone-200 dark:border-stone-700 py-6 mt-12">
         <div class="max-w-5xl mx-auto px-4 text-center text-sm text-stone-400 dark:text-stone-500">
-            Tim Creamer Prayer Room
+            {{ site.brand_name|default:"Prayer Room" }}
         </div>
     </footer>
 

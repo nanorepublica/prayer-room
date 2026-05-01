@@ -1,7 +1,6 @@
 from collections import defaultdict
 
 from django.db.models import F
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.views import View
@@ -9,12 +8,12 @@ from django.views.generic import FormView, ListView, TemplateView
 
 from .forms import PrayerSubmitForm
 from .models import (
-    HomePageContent,
     Location,
     PrayerInspiration,
     PrayerPraiseRequest,
     PrayerResource,
     Setting,
+    SiteContent,
 )
 
 
@@ -23,9 +22,9 @@ class LandingView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["content"] = {
-            item.key: item.value for item in HomePageContent.objects.all()
-        }
+        context["content"] = dict(
+            SiteContent.objects.values_list("key", "value")
+        )
         context["inspiration"] = PrayerInspiration.objects.order_by("?").first()
         context["settings"] = {
             item.name: item for item in Setting.objects.all()
@@ -87,9 +86,7 @@ class FlagPrayerView(View):
         )
         prayer.flagged_at = now()
         prayer.save(update_fields=["flagged_at"])
-        return HttpResponse(
-            '<p class="text-sm text-stone-500 dark:text-stone-400 italic">Thank you for letting us know.</p>'
-        )
+        return render(request, "prayer_wall/_flag_thanks.html")
 
 
 class SubmitPrayerView(FormView):

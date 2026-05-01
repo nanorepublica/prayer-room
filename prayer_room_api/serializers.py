@@ -2,12 +2,12 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import (
-    HomePageContent,
     Location,
     PrayerInspiration,
     PrayerPraiseRequest,
     PrayerResource,
     Setting,
+    SiteContent,
     UserProfile,
 )
 
@@ -22,10 +22,10 @@ class PrayerInspirationSerializer(serializers.ModelSerializer):
         )
 
 
-class HomePageContentSerializer(serializers.ModelSerializer):
+class SiteContentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = HomePageContent
+        model = SiteContent
         fields = (
             "key",
             "value",

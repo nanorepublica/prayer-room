@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context, Template
+from django.urls import reverse
 from django.utils import timezone
 
 from .models import EmailLog, EmailTemplate, PrayerPraiseRequest, UserProfile
@@ -124,7 +125,7 @@ def send_moderator_digest(self):
     if pending_count == 0 and flagged_count == 0:
         return "No pending or flagged requests"
 
-    moderation_url = "https://api.prayer.thec3.uk/moderation/"
+    moderation_url = f"{settings.SITE_BASE_URL.rstrip('/')}{reverse('moderation')}"
 
     sent_count = 0
     for user in staff_users:

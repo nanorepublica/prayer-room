@@ -1,8 +1,8 @@
 <div class="text-center py-12">
     <div class="text-4xl mb-4">&#128591;</div>
-    <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mb-2">Thank you</h2>
+    <h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100 mb-2">{{ site.submit_success_title|default:"Thank you" }}</h2>
     <p class="text-stone-600 dark:text-stone-400 mb-6">
-        Your prayer has been submitted and will appear on the wall after review.
+        {{ site.submit_success_body|default:"Your prayer has been submitted and will appear on the wall after review." }}
     </p>
     <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="{% url 'submit-prayer' %}"
@@ -10,8 +10,8 @@
             Submit Another
         </a>
         <a href="{% url 'prayer-wall' %}"
-           class="px-4 py-2 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-lg text-sm font-medium hover:bg-stone-700 dark:hover:bg-stone-300 transition-colors">
-            View Prayer Wall
+           class="px-4 py-2 bg-brand text-on-brand rounded-lg text-sm font-medium hover:bg-brand/85 transition-colors">
+            {{ site.cta_view_wall|default:"View Prayer Wall" }}
         </a>
     </div>
 </div>

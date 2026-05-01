@@ -8,7 +8,7 @@ def create_user(apps, schema_editor):
 
     user = User.objects.create_user(
         'remix_app',
-        'prayer@thec3.uk'
+        'prayer@akmiller.co.uk'
     )
 
 

@@ -72,12 +72,26 @@ class PrayerPraiseRequest(models.Model):
         super().save(*args, **kwargs)
 
 
-class HomePageContent(models.Model):
-    key = models.CharField(max_length=50)
-    value = models.TextField()
+class SiteContentManager(models.Manager):
+    def get_value(self, key, default=""):
+        return (
+            self.filter(key=key).values_list("value", flat=True).first() or default
+        )
+
+
+class SiteContent(models.Model):
+    """Admin-editable key/value store for whitelabel branding and copy."""
+
+    key = models.CharField(max_length=100, unique=True)
+    value = models.TextField(blank=True)
+
+    objects = SiteContentManager()
+
+    class Meta:
+        ordering = ["key"]
 
     def __str__(self):
-        return f"{self.key}"
+        return self.key
 
 
 class Setting(models.Model):

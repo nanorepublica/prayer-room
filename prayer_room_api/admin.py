@@ -6,12 +6,12 @@ from .models import (
     BannedWord,
     EmailLog,
     EmailTemplate,
-    HomePageContent,
     Location,
     PrayerInspiration,
     PrayerPraiseRequest,
     PrayerResource,
     Setting,
+    SiteContent,
     UserProfile,
 )
 from .resources import PrayerRequestResource
@@ -47,9 +47,11 @@ class LocationAdmin(ImportMixin, admin.ModelAdmin):
     list_editable = ("name", "is_active")
 
 
-@admin.register(HomePageContent)
-class HomePageContentAdmin(ImportMixin, admin.ModelAdmin):
+@admin.register(SiteContent)
+class SiteContentAdmin(ImportMixin, admin.ModelAdmin):
     list_display = ("key", "value")
+    search_fields = ("key", "value")
+    ordering = ("key",)
 
 
 @admin.register(PrayerInspiration)

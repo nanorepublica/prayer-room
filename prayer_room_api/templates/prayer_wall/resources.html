@@ -1,11 +1,11 @@
 {% extends "public_base.html" %}
 
-{% block title %}Prayer Resources — Prayer Room{% endblock %}
+{% block subtitle %}{{ site.pages_resources_title|default:"Prayer Resources" }} — {% endblock %}
 
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 py-10">
 
-    <h1 class="text-2xl font-bold text-stone-900 dark:text-stone-100 mb-8">Prayer Resources</h1>
+    <h1 class="text-2xl font-bold text-stone-900 dark:text-stone-100 mb-8">{{ site.pages_resources_title|default:"Prayer Resources" }}</h1>
 
     {% for section, items in grouped_resources %}
     <details class="mb-6 group" open>

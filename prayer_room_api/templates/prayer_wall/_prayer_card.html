@@ -5,7 +5,7 @@
             {% if prayer.type == "praise" %}
             <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300">Praise</span>
             {% else %}
-            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">Prayer</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">{{ site.badge_prayer|default:"Prayer" }}</span>
             {% endif %}
         </div>
         <span class="text-xs text-stone-400 dark:text-stone-500 shrink-0">{{ prayer.created_at|timesince }} ago</span>
@@ -20,7 +20,7 @@
     </div>
     {% endif %}
 
-    <div class="flex items-center justify-between pt-1">
+    <div class="flex items-center justify-between pt-1 mt-auto">
         <div class="flex items-center gap-1">
             <button hx-post="{% url 'pray-prayer' prayer.pk %}"
                     hx-target="#prayer-{{ prayer.pk }}"
@@ -38,9 +38,9 @@
             <button hx-post="{% url 'flag-prayer' prayer.pk %}"
                     hx-target="#prayer-{{ prayer.pk }}"
                     hx-swap="innerHTML"
-                    hx-confirm="Are you sure you want to report this prayer?"
+                    hx-confirm="{{ site.confirm_report_prayer|default:'Are you sure you want to report this prayer?' }}"
                     class="text-stone-300 hover:text-stone-500 dark:text-stone-600 dark:hover:text-stone-400 text-xs"
-                    aria-label="Report this prayer">
+                    aria-label="{{ site.aria_report_prayer|default:'Report this prayer' }}">
                 &#9873;
             </button>
         </div>

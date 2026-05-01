@@ -45,21 +45,21 @@ from .forms import (
 from .models import (
     BannedWord,
     EmailTemplate,
-    HomePageContent,
     Location,
     PrayerInspiration,
     PrayerPraiseRequest,
     PrayerResource,
     Setting,
+    SiteContent,
     UserProfile,
 )
 from .serializers import (
-    HomePageContentSerializer,
     LocationSerializer,
     PrayerInspirationSerializer,
     PrayerPraiseRequestSerializer,
     PrayerResourceSerializer,
     SettingSerializer,
+    SiteContentSerializer,
     UserProfileSerializer,
 )
 
@@ -69,9 +69,9 @@ class PrayerInspirationModelViewSet(ReadOnlyModelViewSet):
     serializer_class = PrayerInspirationSerializer
 
 
-class HomePageContentModelViewSet(ReadOnlyModelViewSet):
-    queryset = HomePageContent.objects.all()
-    serializer_class = HomePageContentSerializer
+class SiteContentModelViewSet(ReadOnlyModelViewSet):
+    queryset = SiteContent.objects.all()
+    serializer_class = SiteContentSerializer
 
 
 class SettingModelViewSet(ReadOnlyModelViewSet):

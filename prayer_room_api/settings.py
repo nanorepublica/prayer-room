@@ -35,6 +35,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "prayer_room_api.context_processors.site_content",
             ],
         },
     },
@@ -171,8 +172,12 @@ class Settings(BaseSettings):
     # Email Configuration - Console backend for development
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     DEFAULT_FROM_EMAIL = env(
-        "Tim Creamer Prayer Room <prayer@thec3.uk>", key="DEFAULT_FROM_EMAIL"
+        "Prayer Room <prayer@akmiller.co.uk>", key="DEFAULT_FROM_EMAIL"
     )
+
+    # Public-facing base URL used to build absolute links in outgoing emails
+    # (digests, notifications). Override per-deployment via env var.
+    SITE_BASE_URL = env("http://localhost:8001", key="SITE_BASE_URL")
 
     # DEBUG defaults to True, but can be overridden by env var `DJANGO_DEBUG`
     DEBUG = env.bool(True, prefix="DJANGO_")
@@ -276,12 +281,13 @@ class StagingSettings(Settings):
 
     # Values that *must* be provided in the environment.
     STATIC_ROOT = env(env.Required)
+    SITE_BASE_URL = env(env.Required, key="SITE_BASE_URL")
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
     CORS_ALLOWED_ORIGINS = []
     CORS_ALLOWED_ORIGIN_REGEXES = [r"https://[\w-]+-\d+--prayer-room\.netlify\.app"]
 
-    ALLOWED_HOSTS = ["staging-prayer-room-api.dokku.thec3.uk"] + [
+    ALLOWED_HOSTS = ["staging-prayer-room-api.dokku.akmiller.co.uk"] + [
         f"172.17.0.{num}" for num in range(2, 255)
     ]
 
@@ -290,7 +296,7 @@ class StagingSettings(Settings):
 
     EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
     DEFAULT_FROM_EMAIL = env(
-        "STAGING Tim Creamer Prayer Room <prayer@thec3.uk>", key="DEFAULT_FROM_EMAIL"
+        "STAGING Prayer Room <prayer@akmiller.co.uk>", key="DEFAULT_FROM_EMAIL"
     )
 
     def ANYMAIL(self):
@@ -307,11 +313,12 @@ class ProdSettings(Settings):
 
     # Values that *must* be provided in the environment.
     STATIC_ROOT = env(env.Required)
+    SITE_BASE_URL = env(env.Required, key="SITE_BASE_URL")
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-    CORS_ALLOWED_ORIGINS = ["https://prayer.thec3.uk"]
+    CORS_ALLOWED_ORIGINS = ["https://prayer.akmiller.co.uk"]
 
-    ALLOWED_HOSTS = ["api.prayer.thec3.uk"] + [
+    ALLOWED_HOSTS = ["api.prayer.akmiller.co.uk"] + [
         f"172.17.0.{num}" for num in range(2, 255)
     ]
 
@@ -321,7 +328,7 @@ class ProdSettings(Settings):
     # Email Configuration - AWS SES via django-anymail
     EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
     DEFAULT_FROM_EMAIL = env(
-        "Tim Creamer Prayer Room <prayer@thec3.uk>", key="DEFAULT_FROM_EMAIL"
+        "Prayer Room <prayer@akmiller.co.uk>", key="DEFAULT_FROM_EMAIL"
     )
 
     def ANYMAIL(self):

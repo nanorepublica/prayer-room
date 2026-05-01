@@ -2,7 +2,7 @@
     {% include "prayer_wall/_prayer_card.html" with prayer=prayer %}
 {% empty %}
     <div class="col-span-full text-center py-12 text-stone-400 dark:text-stone-500">
-        <p class="text-lg mb-2">No prayers yet.</p>
+        <p class="text-lg mb-2">{{ site.empty_wall_heading|default:"No prayers yet." }}</p>
         <a href="{% url 'submit-prayer' %}" class="text-stone-600 dark:text-stone-400 underline hover:no-underline">Be the first to submit one.</a>
     </div>
 {% endfor %}

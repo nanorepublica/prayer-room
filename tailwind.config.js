@@ -5,7 +5,25 @@ module.exports = {
   content: ["./templates/**/*.html", "**/templates/**/*.html"],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brand: "rgb(var(--brand-primary) / <alpha-value>)",
+        "on-brand": "rgb(var(--brand-on-primary) / <alpha-value>)",
+      },
+      fontFamily: {
+        sans: [
+          "var(--brand-font, ui-sans-serif)",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica",
+          "Arial",
+          "sans-serif",
+        ],
+      },
+    },
   },
   plugins: [
     require("@tailwindcss/typography"),

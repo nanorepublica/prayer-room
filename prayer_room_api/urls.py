@@ -33,7 +33,6 @@ from .views import (
     EmailTemplateCRUDView,
     EmailTemplatePreviewView,
     FlaggedView,
-    HomePageContentModelViewSet,
     LocationModelViewSet,
     ModerationView,
     PrayerInspirationModelViewSet,
@@ -43,6 +42,7 @@ from .views import (
     PrayerResourceViewSet,
     PrayerResponseView,
     SettingModelViewSet,
+    SiteContentModelViewSet,
     StaffDashboardView,
     UpdatePreferencesView,
     UserProfileViewSet,
@@ -50,7 +50,7 @@ from .views import (
 
 router = SimpleRouter()
 router.register(r"prayer-inspiration", PrayerInspirationModelViewSet)
-router.register(r"content", HomePageContentModelViewSet)
+router.register(r"content", SiteContentModelViewSet)
 router.register(r"prayer-requests", PrayerPraiseRequestViewSet)
 router.register(r"locations", LocationModelViewSet)
 router.register(r"settings", SettingModelViewSet)

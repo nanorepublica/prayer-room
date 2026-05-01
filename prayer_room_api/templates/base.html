@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Tim Creamer Prayer Room{% endblock %}</title>
+    <title>{% block subtitle %}{% endblock %}{{ site.brand_name|default:"Prayer Room" }}</title>
     {% tailwind_css %}
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script>
@@ -17,7 +17,19 @@
             }
         })();
     </script>
+    {% if site.brand_font_google_url %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="{{ site.brand_font_google_url }}">
+    {% endif %}
     <style>
+        /* Brand variables (overridable from SiteContent admin) */
+        :root {
+            --brand-primary: {{ site.brand_primary_rgb|default:"23 23 23" }};
+            --brand-on-primary: {{ site.brand_on_primary_rgb|default:"255 255 255" }};
+            {% if site.brand_font_family %}--brand-font: "{{ site.brand_font_family }}";{% endif %}
+        }
+
         /* Light theme (default) */
         :root {
             --bg-page: #f5f5f5;
@@ -34,8 +46,8 @@
             --shadow-color: rgba(0, 0, 0, 0.1);
             --shadow-heavy: rgba(0, 0, 0, 0.25);
             --backdrop-color: rgba(0, 0, 0, 0.5);
-            --btn-primary-bg: #111;
-            --btn-primary-hover: #333;
+            --btn-primary-bg: rgb(var(--brand-primary));
+            --btn-primary-hover: rgb(var(--brand-primary) / 0.85);
             --btn-danger-bg: #dc2626;
             --btn-danger-hover: #b91c1c;
             --toast-bg: #065f46;
@@ -71,8 +83,8 @@
             --shadow-color: rgba(0, 0, 0, 0.3);
             --shadow-heavy: rgba(0, 0, 0, 0.5);
             --backdrop-color: rgba(0, 0, 0, 0.7);
-            --btn-primary-bg: #f0f0f0;
-            --btn-primary-hover: #d0d0d0;
+            --btn-primary-bg: rgb(var(--brand-primary));
+            --btn-primary-hover: rgb(var(--brand-primary) / 0.85);
             --btn-danger-bg: #dc2626;
             --btn-danger-hover: #ef4444;
             --toast-bg: #065f46;
@@ -125,7 +137,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: var(--brand-font, -apple-system), BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg-page);
             color: var(--text-secondary);
             line-height: 1.5;
@@ -778,7 +790,7 @@
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <header class="site-header">
         <div class="header-top">
-            <a href="{% url 'staff-dashboard' %}" class="site-title">Tim Creamer Prayer Room</a>
+            <a href="{% url 'staff-dashboard' %}" class="site-title">{{ site.brand_name|default:"Prayer Room" }}</a>
             <div class="header-right">
                 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
                     <span class="icon-sun">&#9728;</span>
