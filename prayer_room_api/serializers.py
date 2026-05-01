@@ -101,10 +101,6 @@ class PrayerPraiseRequestSerializer(serializers.ModelSerializer):
         return bool(obj.approved_at)
 
 
-class PrayerPraiseRequestWebhookSerializer(PrayerPraiseRequestSerializer):
-    location = LocationSerializer()
-
-
 class SettingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Setting

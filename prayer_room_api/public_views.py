@@ -58,7 +58,7 @@ class PrayerWallView(ListView):
 
     def get_template_names(self):
         if self.request.htmx:
-            return ["prayer_wall/_prayer_list.html"]
+            return ["prayer_wall/wall.html#htmx-update"]
         return [self.template_name]
 
 

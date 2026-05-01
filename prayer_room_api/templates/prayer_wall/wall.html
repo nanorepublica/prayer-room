@@ -13,12 +13,17 @@
         </a>
     </div>
 
-    <div class="flex flex-wrap gap-2 mb-8" role="tablist" aria-label="Filter by location">
+    {% partialdef filter-pills inline %}
+    <div id="filter-pills"
+         class="flex flex-wrap gap-2 mb-8"
+         role="tablist"
+         aria-label="Filter by location"
+         {% if hx_oob %}hx-swap-oob="true"{% endif %}>
         <a href="{% url 'prayer-wall' %}"
            hx-get="{% url 'prayer-wall' %}"
            hx-target="#prayer-grid"
            hx-push-url="true"
-           class="px-3 py-1.5 text-sm rounded-full border transition-colors {% if not current_location %}bg-brand text-on-brand border-brand{% else %}border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800{% endif %}"
+           class="px-3 py-1.5 text-sm rounded-full border transition-colors {% if not current_location %}bg-brand text-on-brand border-brand ring-1 ring-stone-300 dark:ring-stone-100{% else %}border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800{% endif %}"
            role="tab"
            aria-selected="{% if not current_location %}true{% else %}false{% endif %}">
             All
@@ -28,17 +33,50 @@
            hx-get="{% url 'prayer-wall' %}?location={{ location.slug }}"
            hx-target="#prayer-grid"
            hx-push-url="true"
-           class="px-3 py-1.5 text-sm rounded-full border transition-colors {% if current_location == location.slug %}bg-brand text-on-brand border-brand{% else %}border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800{% endif %}"
+           class="px-3 py-1.5 text-sm rounded-full border transition-colors {% if current_location == location.slug %}bg-brand text-on-brand border-brand ring-1 ring-stone-300 dark:ring-stone-100{% else %}border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800{% endif %}"
            role="tab"
            aria-selected="{% if current_location == location.slug %}true{% else %}false{% endif %}">
             {{ location.name }}
         </a>
         {% endfor %}
     </div>
+    {% endpartialdef %}
+
+    {% comment %}
+      `prayer-list` is the cards-only payload. The grid wrapper stays in the parent template
+      so HTMX `innerHTML` swaps don't nest a second `.grid` div inside `#prayer-grid`.
+    {% endcomment %}
+    {% partialdef prayer-list %}
+        {% for prayer in prayers %}
+            {% include "prayer_wall/_prayer_card.html" with prayer=prayer %}
+        {% empty %}
+            <div class="col-span-full text-center py-12 text-stone-400 dark:text-stone-500">
+                <p class="text-lg mb-2">No prayers yet.</p>
+                <a href="{% url 'submit-prayer' %}" class="text-stone-600 dark:text-stone-400 underline hover:no-underline">Be the first to submit one.</a>
+            </div>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <div id="load-more" class="col-span-full text-center pt-4">
+            <button hx-get="{% url 'prayer-wall' %}?page={{ page_obj.next_page_number }}{% if current_location %}&location={{ current_location }}{% endif %}"
+                    hx-target="#load-more"
+                    hx-swap="outerHTML"
+                    class="px-5 py-2 text-sm border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-400 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+                Load more
+            </button>
+        </div>
+        {% endif %}
+    {% endpartialdef %}
 
     <div id="prayer-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {% include "prayer_wall/_prayer_list.html" %}
+        {% partial prayer-list %}
     </div>
+
+    {% comment %}HTMX response: cards (swapped into #prayer-grid via innerHTML) + OOB filter-pills update.{% endcomment %}
+    {% partialdef htmx-update %}
+        {% partial prayer-list %}
+        {% with hx_oob=True %}{% partial filter-pills %}{% endwith %}
+    {% endpartialdef %}
 
 </div>
 {% endblock %}

@@ -90,12 +90,6 @@ TAILWIND_CLI_DIST_CSS = "css/tailwind.css"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-DJANGO_WEBHOOK = dict(
-    MODELS=["prayer_room_api.PrayerPraiseRequest", "prayer_room_api.Setting"]
-    # MODELS=["prayer_room_api.Setting"]
-)
-
-
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
@@ -203,7 +197,6 @@ class Settings(BaseSettings):
                     "rest_framework",
                     "rest_framework.authtoken",
                     "corsheaders",
-                    "django_webhook",
                     "django_extensions",
                     "django_htmx",
                     "neapolitan",
