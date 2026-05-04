@@ -18,7 +18,6 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     libjpeg62-turbo-dev \
     zlib1g-dev \
     libwebp-dev \
-    pipx \
     && rm -rf /var/lib/apt/lists/*
 
 RUN addgroup --system django \
@@ -33,12 +32,12 @@ ENV POETRY_NO_INTERACTION=1 \
 
 WORKDIR /app
 
-# Requirements are installed here to ensure they will be cached.
-RUN pipx ensurepath
-RUN pipx install poetry==2.0.0
+# Install poetry using the image's Python 3.13 (avoiding pipx, which pulls in
+# Debian Bookworm's python3.11 and confuses poetry's interpreter resolution).
+RUN pip install --no-cache-dir poetry==2.0.0
 
 COPY entrypoint README.md pyproject.toml poetry.lock ./
-RUN /root/.local/bin/poetry install --only main --no-root --no-directory
+RUN poetry install --only main --no-root --no-directory
 
 FROM base AS runtime
 
