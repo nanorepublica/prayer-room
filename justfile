@@ -29,6 +29,3 @@ tw-dev:
 
 tw-build:
     python manage.py tailwind build
-
-worker:
-    .venv/bin/celery -A prayer_room_api worker --loglevel=info

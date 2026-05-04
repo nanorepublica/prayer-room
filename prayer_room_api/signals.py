@@ -1,5 +1,6 @@
 import logging
 
+from django.db import transaction
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
@@ -22,11 +23,9 @@ def check_response_change(sender, instance, **kwargs):
     except PrayerPraiseRequest.DoesNotExist:
         return
 
-    # Check if response_comment changed from empty to populated
     if not old_instance.response_comment and instance.response_comment:
-        # Import here to avoid circular imports
         from .tasks import send_response_notification
 
-        # Queue the notification task
-        send_response_notification.delay(instance.pk)
+        prayer_request_id = instance.pk
+        transaction.on_commit(lambda: send_response_notification(prayer_request_id))
         logger.info(f"Queued response notification for prayer request {instance.pk}")

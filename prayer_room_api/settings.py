@@ -202,7 +202,6 @@ class Settings(BaseSettings):
                     "neapolitan",
                     "django_filters",
                     "django_prodserver",
-                    "django_celery_beat",
                     "django_tailwind_cli",
                     "prayer_room_api",
                 ],
@@ -256,8 +255,6 @@ class Settings(BaseSettings):
         }
 
     def PRODUCTION_PROCESSES(self):
-        # Note: Only web process uses prodserver. Celery worker/beat use direct
-        # commands due to django-prodserver celery backend limitations.
         return {
             "web": {
                 "BACKEND": "django_prodserver.backends.gunicorn.GunicornServer",
@@ -285,7 +282,6 @@ class StagingSettings(Settings):
     ]
 
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    CELERY_BROKER_URL = env(env.Required, key="RABBITMQ_URL")
 
     EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
     DEFAULT_FROM_EMAIL = env(
@@ -316,7 +312,6 @@ class ProdSettings(Settings):
     ]
 
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    CELERY_BROKER_URL = env(env.Required, key="RABBITMQ_URL")
 
     # Email Configuration - AWS SES via django-anymail
     EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"

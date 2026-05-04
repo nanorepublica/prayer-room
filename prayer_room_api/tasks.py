@@ -1,7 +1,6 @@
 import logging
 
 import markdown
-from celery import shared_task
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
@@ -63,8 +62,7 @@ def send_templated_email(template, recipient_email, context_data):
         raise
 
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60)
-def send_moderator_digest(self):
+def send_moderator_digest():
     """
     Hourly digest for staff users with pending and flagged requests.
     Only sends if there has been activity in the last hour.
@@ -146,8 +144,7 @@ def send_moderator_digest(self):
     return f"Sent moderator digest to {sent_count} staff members"
 
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60)
-def send_user_digest(self, frequency="daily"):
+def send_user_digest(frequency="daily"):
     """
     Daily or weekly digest for users with updates on their prayer requests.
 
@@ -207,8 +204,7 @@ def send_user_digest(self, frequency="daily"):
     return f"Sent user digest ({frequency}) to {sent_count} users"
 
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60)
-def send_response_notification(self, prayer_request_id):
+def send_response_notification(prayer_request_id):
     """
     Immediate notification when response_comment is added to a prayer request.
     Only sends to users who have opted in.

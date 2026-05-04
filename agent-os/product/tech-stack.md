@@ -19,7 +19,6 @@
 | django-extensions | Development utilities |
 | django-htmx | HTMX integration |
 | neapolitan | Admin view customization |
-| celery | Background task processing |
 
 ### Database & Storage
 | Technology | Purpose |

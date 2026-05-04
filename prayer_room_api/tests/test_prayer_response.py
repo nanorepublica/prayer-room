@@ -79,7 +79,7 @@ class PrayerResponseViewTests(TestCase):
         has_empty_message = any(msg in content for msg in EMPTY_QUEUE_MESSAGES)
         self.assertTrue(has_empty_message, "Expected one of the empty queue messages")
 
-    @patch("prayer_room_api.tasks.send_response_notification.delay")
+    @patch("prayer_room_api.tasks.send_response_notification")
     def test_get_excludes_prayers_with_response(self, mock_task):
         """Test that prayers with existing response_comment are excluded."""
         self.eligible_prayer.response_comment = "Already responded"
@@ -91,7 +91,7 @@ class PrayerResponseViewTests(TestCase):
         # Should show empty state, not the prayer
         self.assertNotContains(response, "Please pray for my family")
 
-    @patch("prayer_room_api.tasks.send_response_notification.delay")
+    @patch("prayer_room_api.tasks.send_response_notification")
     def test_post_respond_saves_response_comment(self, mock_task):
         """Test POST with action=respond saves response_comment and returns next request."""
         self.client.login(username="staffuser", password="testpass123")
@@ -236,7 +236,7 @@ class PrayerResponseIntegrationTests(TestCase):
             type="praise",
         )
 
-    @patch("prayer_room_api.tasks.send_response_notification.delay")
+    @patch("prayer_room_api.tasks.send_response_notification")
     def test_respond_workflow_advances_to_next(self, mock_task):
         """Test full respond workflow: respond to one, see the next."""
         self.client.login(username="staffuser", password="testpass123")

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("prayer_room_api", "0016_create_celery_beat_schedules"),
+        ("prayer_room_api", "0015_seed_email_templates"),
     ]
 
     operations = [
