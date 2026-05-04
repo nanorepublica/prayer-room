@@ -9,5 +9,19 @@
                 "attempts": 3
             }
         ]
-    }
+    },
+    "cron": [
+        {
+            "command": "python manage.py send_moderator_digest",
+            "schedule": "0 * * * *"
+        },
+        {
+            "command": "python manage.py send_user_digest --frequency=daily",
+            "schedule": "0 8 * * *"
+        },
+        {
+            "command": "python manage.py send_user_digest --frequency=weekly",
+            "schedule": "0 8 * * 1"
+        }
+    ]
 }
