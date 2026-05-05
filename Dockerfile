@@ -47,6 +47,24 @@ WORKDIR /app
 # Copy project code
 COPY . .
 
+# Pre-download the Tailwind CLI with curl (streams to disk in ~64KB chunks)
+# rather than letting django-tailwind-cli's Python downloader buffer the whole
+# ~150MB binary into memory — which OOM-kills (exit 137) on small build hosts.
+# Path matches what django-tailwind-cli expects, so `tailwind build` finds it
+# cached and skips its own download.
+ARG TAILWIND_VERSION=3.4.13
+RUN ARCH=$(uname -m) \
+    && case "$ARCH" in \
+         x86_64)  TW_ARCH=linux-x64 ;; \
+         aarch64) TW_ARCH=linux-arm64 ;; \
+         *) echo "Unsupported arch: $ARCH" >&2; exit 1 ;; \
+       esac \
+    && mkdir -p /root/.local/bin \
+    && curl -sSL --fail \
+         -o "/root/.local/bin/tailwindcss-${TW_ARCH}-${TAILWIND_VERSION}" \
+         "https://github.com/tailwindlabs/tailwindcss/releases/download/v${TAILWIND_VERSION}/tailwindcss-${TW_ARCH}" \
+    && chmod +x "/root/.local/bin/tailwindcss-${TW_ARCH}-${TAILWIND_VERSION}"
+
 # Build Tailwind CSS at image build time so collectstatic at container start
 # can find prayer_room_api/static/css/tailwind.css (referenced by templates
 # and required by ManifestStaticFilesStorage). DJANGO_DEBUG=false avoids
