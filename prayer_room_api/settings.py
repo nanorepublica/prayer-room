@@ -238,7 +238,7 @@ class Settings(BaseSettings):
         )
 
     # Parse the URL into a database config dict.
-    DEFAULT_DATABASE = env.dburl("sqlite:///db.sqlite3")
+    DEFAULT_DATABASE_URL = env.dburl("sqlite:///db.sqlite3")
 
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:4000",
@@ -251,7 +251,7 @@ class Settings(BaseSettings):
 
     def DATABASES(self):
         return {
-            "default": self.DEFAULT_DATABASE,
+            "default": self.DEFAULT_DATABASE_URL,
         }
 
     def PRODUCTION_PROCESSES(self):
