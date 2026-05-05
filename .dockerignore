@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+.vscode
+.claude
+.playwright-mcp
+__pycache__
+*.pyc
+*.pyo
+db.sqlite3
+.env
+.env.*
+node_modules
+agent-os

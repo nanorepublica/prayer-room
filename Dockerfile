@@ -47,6 +47,11 @@ WORKDIR /app
 # Copy project code
 COPY . .
 
+# Build Tailwind CSS at image build time so collectstatic at container start
+# can find prayer_room_api/static/css/tailwind.css (referenced by templates
+# and required by ManifestStaticFilesStorage).
+RUN python manage.py tailwind build
+
 # Run as non-root user
 RUN chown -R django:django /app
 USER django
