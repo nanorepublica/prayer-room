@@ -307,7 +307,7 @@ class ProdSettings(Settings):
 
     CORS_ALLOWED_ORIGINS = ["https://prayer.akmiller.co.uk"]
 
-    ALLOWED_HOSTS = ["api.prayer.akmiller.co.uk"] + [
+    ALLOWED_HOSTS = ["prayer-room.dokku.akmiller.co.uk"] + [
         f"172.17.0.{num}" for num in range(2, 255)
     ]
 
