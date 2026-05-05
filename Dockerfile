@@ -49,8 +49,9 @@ COPY . .
 
 # Build Tailwind CSS at image build time so collectstatic at container start
 # can find prayer_room_api/static/css/tailwind.css (referenced by templates
-# and required by ManifestStaticFilesStorage).
-RUN python manage.py tailwind build
+# and required by ManifestStaticFilesStorage). DJANGO_DEBUG=false avoids
+# loading debug_toolbar (a dev-only dep not installed in this image).
+RUN DJANGO_DEBUG=false python manage.py tailwind build
 
 # Run as non-root user
 RUN chown -R django:django /app

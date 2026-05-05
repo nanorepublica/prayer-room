@@ -272,7 +272,14 @@ class StagingSettings(Settings):
     # Values that *must* be provided in the environment.
     STATIC_ROOT = env(env.Required)
     SITE_BASE_URL = env(env.Required, key="SITE_BASE_URL")
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
     CORS_ALLOWED_ORIGINS = []
     CORS_ALLOWED_ORIGIN_REGEXES = [r"https://[\w-]+-\d+--prayer-room\.netlify\.app"]
@@ -303,7 +310,14 @@ class ProdSettings(Settings):
     # Values that *must* be provided in the environment.
     STATIC_ROOT = env(env.Required)
     SITE_BASE_URL = env(env.Required, key="SITE_BASE_URL")
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
     CORS_ALLOWED_ORIGINS = ["https://prayer.akmiller.co.uk"]
 
