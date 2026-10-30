@@ -168,3 +168,5 @@ cython_debug/
 
 # Tailwind compiled output (regenerate with `just tailwind`)
 prayer_room_api/static/css/
+.dev.pid
+.dev.log
